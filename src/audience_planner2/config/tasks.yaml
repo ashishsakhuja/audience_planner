@@ -1,8 +1,7 @@
 find_audience_segment:
   description: >
-    Use the provided audience segment knowledge base to find the best-matching audience segments 
-    based on the user's targeting query.
-    You should recommend 3–5 segments based on their relevance to age, income, and engagement.
+    Analyze the following targeting query: {query}.
+    Use the audience segment data from the knowledge base to identify and rank the best matching segments.
   expected_output: |
     Return results in Markdown format with:
     - Segment name
