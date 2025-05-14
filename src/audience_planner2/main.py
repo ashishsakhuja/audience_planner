@@ -21,7 +21,7 @@ def run():
     
     try:
         result = AudiencePlannerCrew().crew().kickoff(inputs=inputs)
-        print("\nRecommended Audeince Segments:\n", result)
+        print("\nRecommended Audience Segments:\n", result)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -31,8 +31,7 @@ def train():
     Train the crew for a given number of iterations.
     """
     inputs = {
-        "topic": "AI LLMs",
-        'current_year': str(datetime.now().year)
+        'query': 'seniors with middle income and recent engagement'
     }
     try:
         AudiencePlannerCrew().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
@@ -55,8 +54,7 @@ def test():
     Test the crew execution and returns the results.
     """
     inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
+        'query': 'seniors with middle income and recent engagement'
     }
     
     try:
