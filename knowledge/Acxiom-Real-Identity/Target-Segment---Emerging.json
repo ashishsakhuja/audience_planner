@@ -1,0 +1,38 @@
+{
+  "name": "Target Segment - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 700886,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "medium",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "high"
+  },
+  "estReach": 638171,
+  "cpm": 6,
+  "cpmCap": 7,
+  "programmaticMediaPct": 87,
+  "advertiserDirectPct": 13,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 39 for Acxiom Real Identity"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Target Group - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data",
+      "demographic_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "7_days"
+    }
+  },
+  "size": 886873,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "high",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "high"
+  },
+  "estReach": 713920,
+  "cpm": 18,
+  "cpmCap": 21,
+  "programmaticMediaPct": 85,
+  "advertiserDirectPct": 15,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 76 for Acxiom Real Identity"
+}

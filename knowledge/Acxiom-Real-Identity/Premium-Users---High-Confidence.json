@@ -1,0 +1,39 @@
+{
+  "name": "Premium Users - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 949223,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "low",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "medium"
+  },
+  "estReach": 816389,
+  "cpm": 19,
+  "cpmCap": 22,
+  "programmaticMediaPct": 54,
+  "advertiserDirectPct": 46,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 48 for Acxiom Real Identity"
+}

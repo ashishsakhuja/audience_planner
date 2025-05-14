@@ -1,0 +1,38 @@
+{
+  "name": "Core Group - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 531688,
+  "demographics": {
+    "age_range": "35-44",
+    "income_level": "high",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "medium"
+  },
+  "estReach": 446657,
+  "cpm": 11,
+  "cpmCap": 12,
+  "programmaticMediaPct": 55,
+  "advertiserDirectPct": 45,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 18 for Acxiom Real Identity"
+}

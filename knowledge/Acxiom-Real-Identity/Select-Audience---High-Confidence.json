@@ -1,0 +1,38 @@
+{
+  "name": "Select Audience - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 322840,
+  "demographics": {
+    "age_range": "45-54",
+    "income_level": "low",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "medium"
+  },
+  "estReach": 289674,
+  "cpm": 36,
+  "cpmCap": 45,
+  "programmaticMediaPct": 50,
+  "advertiserDirectPct": 50,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 98 for Acxiom Real Identity"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Select Users - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "90_days"
+    }
+  },
+  "size": 991276,
+  "demographics": {
+    "age_range": "35-44",
+    "income_level": "low",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "high"
+  },
+  "estReach": 926723,
+  "cpm": 6,
+  "cpmCap": 7,
+  "programmaticMediaPct": 64,
+  "advertiserDirectPct": 36,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 87 for Acxiom Real Identity"
+}

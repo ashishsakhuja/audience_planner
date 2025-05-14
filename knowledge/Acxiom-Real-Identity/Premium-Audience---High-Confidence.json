@@ -1,0 +1,40 @@
+{
+  "name": "Premium Audience - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data",
+      "demographic_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "90_days"
+    }
+  },
+  "size": 222423,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "high",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "medium"
+  },
+  "estReach": 182551,
+  "cpm": 32,
+  "cpmCap": 40,
+  "programmaticMediaPct": 54,
+  "advertiserDirectPct": 46,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 82 for Acxiom Real Identity"
+}

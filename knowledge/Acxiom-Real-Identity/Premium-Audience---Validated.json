@@ -1,0 +1,38 @@
+{
+  "name": "Premium Audience - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "90_days"
+    }
+  },
+  "size": 398060,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "high",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "medium"
+  },
+  "estReach": 320813,
+  "cpm": 18,
+  "cpmCap": 20,
+  "programmaticMediaPct": 82,
+  "advertiserDirectPct": 18,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 44 for Acxiom Real Identity"
+}

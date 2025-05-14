@@ -1,0 +1,39 @@
+{
+  "name": "Premium Segment - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "7_days"
+    }
+  },
+  "size": 722588,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "medium",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "low"
+  },
+  "estReach": 685319,
+  "cpm": 24,
+  "cpmCap": 30,
+  "programmaticMediaPct": 78,
+  "advertiserDirectPct": 22,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 53 for Acxiom Real Identity"
+}

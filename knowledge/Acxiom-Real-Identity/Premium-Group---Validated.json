@@ -1,0 +1,38 @@
+{
+  "name": "Premium Group - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "90_days"
+    }
+  },
+  "size": 513706,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "medium",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "high"
+  },
+  "estReach": 487580,
+  "cpm": 12,
+  "cpmCap": 14,
+  "programmaticMediaPct": 70,
+  "advertiserDirectPct": 30,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 95 for Acxiom Real Identity"
+}

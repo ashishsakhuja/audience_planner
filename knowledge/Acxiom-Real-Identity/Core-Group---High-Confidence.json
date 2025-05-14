@@ -1,0 +1,38 @@
+{
+  "name": "Core Group - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 414313,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "affluent",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "low"
+  },
+  "estReach": 352423,
+  "cpm": 41,
+  "cpmCap": 47,
+  "programmaticMediaPct": 51,
+  "advertiserDirectPct": 49,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 100 for Acxiom Real Identity"
+}

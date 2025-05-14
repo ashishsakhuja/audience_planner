@@ -1,0 +1,39 @@
+{
+  "name": "Core Users - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 134109,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "low",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "medium"
+  },
+  "estReach": 112756,
+  "cpm": 37,
+  "cpmCap": 47,
+  "programmaticMediaPct": 73,
+  "advertiserDirectPct": 27,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 25 for Acxiom Real Identity"
+}

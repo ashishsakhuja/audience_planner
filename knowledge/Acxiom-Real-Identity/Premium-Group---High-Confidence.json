@@ -1,0 +1,39 @@
+{
+  "name": "Premium Group - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 120261,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "affluent",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "high"
+  },
+  "estReach": 108999,
+  "cpm": 27,
+  "cpmCap": 32,
+  "programmaticMediaPct": 67,
+  "advertiserDirectPct": 33,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 49 for Acxiom Real Identity"
+}

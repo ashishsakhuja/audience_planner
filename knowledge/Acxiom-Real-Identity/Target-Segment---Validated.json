@@ -1,0 +1,39 @@
+{
+  "name": "Target Segment - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 437784,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "high",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "high"
+  },
+  "estReach": 394097,
+  "cpm": 46,
+  "cpmCap": 55,
+  "programmaticMediaPct": 89,
+  "advertiserDirectPct": 11,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 71 for Acxiom Real Identity"
+}

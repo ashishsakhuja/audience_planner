@@ -1,0 +1,39 @@
+{
+  "name": "Premium Segment - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "30_days"
+    }
+  },
+  "size": 507761,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "low",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "low"
+  },
+  "estReach": 448373,
+  "cpm": 26,
+  "cpmCap": 33,
+  "programmaticMediaPct": 77,
+  "advertiserDirectPct": 23,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 31 for Acxiom Real Identity"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Premium Users - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 358581,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "medium",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "low"
+  },
+  "estReach": 297166,
+  "cpm": 23,
+  "cpmCap": 28,
+  "programmaticMediaPct": 87,
+  "advertiserDirectPct": 13,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 81 for Acxiom Real Identity"
+}

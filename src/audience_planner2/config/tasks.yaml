@@ -1,0 +1,13 @@
+find_audience_segment:
+  description: >
+    Use the provided audience segment knowledge base to find the best-matching audience segments 
+    based on the user's targeting query.
+    You should recommend 3–5 segments based on their relevance to age, income, and engagement.
+  expected_output: |
+    Return results in Markdown format with:
+    - Segment name
+    - Age group, income range, engagement recency
+    - Reach and CPM
+    - A short rationale for each
+  agent: segment_agent
+

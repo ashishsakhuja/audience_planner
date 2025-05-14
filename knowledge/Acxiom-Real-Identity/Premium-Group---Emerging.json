@@ -1,0 +1,39 @@
+{
+  "name": "Premium Group - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "30_days"
+    }
+  },
+  "size": 781498,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "medium",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "medium"
+  },
+  "estReach": 636848,
+  "cpm": 47,
+  "cpmCap": 55,
+  "programmaticMediaPct": 41,
+  "advertiserDirectPct": 59,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 9 for Acxiom Real Identity"
+}

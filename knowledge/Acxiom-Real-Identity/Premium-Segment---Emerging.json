@@ -1,0 +1,40 @@
+{
+  "name": "Premium Segment - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data",
+      "demographic_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "90_days"
+    }
+  },
+  "size": 925170,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "high",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "high"
+  },
+  "estReach": 795034,
+  "cpm": 38,
+  "cpmCap": 46,
+  "programmaticMediaPct": 43,
+  "advertiserDirectPct": 57,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 86 for Acxiom Real Identity"
+}

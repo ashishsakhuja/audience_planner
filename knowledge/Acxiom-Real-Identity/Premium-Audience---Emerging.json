@@ -1,0 +1,39 @@
+{
+  "name": "Premium Audience - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "demographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "90_days"
+    }
+  },
+  "size": 161223,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "medium",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "low"
+  },
+  "estReach": 136882,
+  "cpm": 24,
+  "cpmCap": 26,
+  "programmaticMediaPct": 54,
+  "advertiserDirectPct": 46,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 45 for Acxiom Real Identity"
+}

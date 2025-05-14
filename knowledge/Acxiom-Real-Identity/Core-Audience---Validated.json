@@ -1,0 +1,38 @@
+{
+  "name": "Core Audience - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 730146,
+  "demographics": {
+    "age_range": "55-64",
+    "income_level": "affluent",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "medium"
+  },
+  "estReach": 669190,
+  "cpm": 47,
+  "cpmCap": 58,
+  "programmaticMediaPct": 59,
+  "advertiserDirectPct": 41,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 74 for Acxiom Real Identity"
+}

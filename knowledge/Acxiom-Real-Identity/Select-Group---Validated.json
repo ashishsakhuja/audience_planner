@@ -1,0 +1,40 @@
+{
+  "name": "Select Group - Validated",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data",
+      "demographic_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 944661,
+  "demographics": {
+    "age_range": "45-54",
+    "income_level": "medium",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "high"
+  },
+  "estReach": 864281,
+  "cpm": 33,
+  "cpmCap": 42,
+  "programmaticMediaPct": 70,
+  "advertiserDirectPct": 30,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 66 for Acxiom Real Identity"
+}

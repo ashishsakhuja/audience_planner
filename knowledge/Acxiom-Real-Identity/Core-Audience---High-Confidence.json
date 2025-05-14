@@ -1,0 +1,38 @@
+{
+  "name": "Core Audience - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 659120,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "low",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "high"
+  },
+  "estReach": 572303,
+  "cpm": 21,
+  "cpmCap": 26,
+  "programmaticMediaPct": 53,
+  "advertiserDirectPct": 47,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 92 for Acxiom Real Identity"
+}

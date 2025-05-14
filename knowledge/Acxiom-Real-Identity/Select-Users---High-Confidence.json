@@ -1,0 +1,39 @@
+{
+  "name": "Select Users - High-Confidence",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "90_days"
+    }
+  },
+  "size": 253647,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "low",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "low"
+  },
+  "estReach": 240264,
+  "cpm": 40,
+  "cpmCap": 51,
+  "programmaticMediaPct": 56,
+  "advertiserDirectPct": 44,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 23 for Acxiom Real Identity"
+}

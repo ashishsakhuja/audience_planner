@@ -1,0 +1,39 @@
+{
+  "name": "Core Users - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 756214,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "low",
+    "location_type": "suburban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "medium"
+  },
+  "estReach": 705611,
+  "cpm": 35,
+  "cpmCap": 40,
+  "programmaticMediaPct": 58,
+  "advertiserDirectPct": 42,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 84 for Acxiom Real Identity"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Core Audience - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "psychographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "7_days"
+    }
+  },
+  "size": 670114,
+  "demographics": {
+    "age_range": "35-44",
+    "income_level": "affluent",
+    "location_type": "rural"
+  },
+  "taxonomyAttributes": {
+    "category": "psychographic",
+    "confidence": "low"
+  },
+  "estReach": 601618,
+  "cpm": 30,
+  "cpmCap": 36,
+  "programmaticMediaPct": 52,
+  "advertiserDirectPct": 48,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 58 for Acxiom Real Identity"
+}

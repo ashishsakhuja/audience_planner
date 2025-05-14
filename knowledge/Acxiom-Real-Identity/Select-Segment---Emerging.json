@@ -1,0 +1,38 @@
+{
+  "name": "Select Segment - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "geographic",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "medium",
+      "recency": "30_days"
+    }
+  },
+  "size": 721500,
+  "demographics": {
+    "age_range": "25-34",
+    "income_level": "affluent",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "geographic",
+    "confidence": "low"
+  },
+  "estReach": 669844,
+  "cpm": 40,
+  "cpmCap": 49,
+  "programmaticMediaPct": 66,
+  "advertiserDirectPct": 34,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 88 for Acxiom Real Identity"
+}

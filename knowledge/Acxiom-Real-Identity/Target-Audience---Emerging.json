@@ -1,0 +1,40 @@
+{
+  "name": "Target Audience - Emerging",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "identityGraphName": "Acxiom Real Identity",
+  "taxonomyId": "propensity",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data",
+      "transaction_data",
+      "demographic_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "90_days"
+    }
+  },
+  "size": 519582,
+  "demographics": {
+    "age_range": "18-24",
+    "income_level": "affluent",
+    "location_type": "urban"
+  },
+  "taxonomyAttributes": {
+    "category": "propensity",
+    "confidence": "high"
+  },
+  "estReach": 422304,
+  "cpm": 26,
+  "cpmCap": 33,
+  "programmaticMediaPct": 58,
+  "advertiserDirectPct": 42,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment 91 for Acxiom Real Identity"
+}

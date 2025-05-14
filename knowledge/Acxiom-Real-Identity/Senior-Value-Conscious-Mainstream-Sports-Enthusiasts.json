@@ -1,0 +1,197 @@
+{
+  "name": "Senior Value-Conscious Mainstream Sports Enthusiasts",
+  "identityGraphName": "Acxiom Real Identity",
+  "logo": {
+    "url": "",
+    "metadata": {
+      "iconName": "users"
+    }
+  },
+  "taxonomyId": "demo_o8qw6",
+  "segmentCriteria": {
+    "datasetIds": [
+      "customer_data",
+      "behavioral_data"
+    ],
+    "filters": {
+      "quality_score": "high",
+      "recency": "90_days"
+    }
+  },
+  "size": 816964,
+  "demographics": {
+    "age": [
+      {
+        "range": "18-24",
+        "percentage": 5,
+        "affinity": 130
+      },
+      {
+        "range": "25-34",
+        "percentage": 4,
+        "affinity": 120
+      },
+      {
+        "range": "35-44",
+        "percentage": 16,
+        "affinity": 310
+      },
+      {
+        "range": "45-54",
+        "percentage": 21,
+        "affinity": 390
+      },
+      {
+        "range": "55-64",
+        "percentage": 26,
+        "affinity": 480
+      },
+      {
+        "range": "65+",
+        "percentage": 28,
+        "affinity": 500
+      }
+    ],
+    "gender": [
+      {
+        "type": "Male",
+        "percentage": 39,
+        "affinity": 100
+      },
+      {
+        "type": "Female",
+        "percentage": 60,
+        "affinity": 100
+      },
+      {
+        "type": "Other",
+        "percentage": 1,
+        "affinity": 100
+      }
+    ],
+    "income": [
+      {
+        "range": "0-25k",
+        "percentage": 30,
+        "affinity": 480,
+        "average": 0,
+        "trend": "down"
+      },
+      {
+        "range": "25k-50k",
+        "percentage": 25,
+        "affinity": 410,
+        "average": 37500,
+        "trend": "stable"
+      },
+      {
+        "range": "50k-75k",
+        "percentage": 18,
+        "affinity": 310,
+        "average": 75000,
+        "trend": "stable"
+      },
+      {
+        "range": "75k-100k",
+        "percentage": 8,
+        "affinity": 170,
+        "average": 112500,
+        "trend": "down"
+      },
+      {
+        "range": "100k-150k",
+        "percentage": 9,
+        "affinity": 180,
+        "average": 150000,
+        "trend": "down"
+      },
+      {
+        "range": "150k+",
+        "percentage": 8,
+        "affinity": 170,
+        "average": 225000,
+        "trend": "stable"
+      }
+    ],
+    "education": [
+      {
+        "level": "High School",
+        "percentage": 29,
+        "affinity": 320,
+        "yoyChange": 7
+      },
+      {
+        "level": "Some College",
+        "percentage": 36,
+        "affinity": 390,
+        "yoyChange": -4
+      },
+      {
+        "level": "Bachelor's",
+        "percentage": 12,
+        "affinity": 160,
+        "yoyChange": 1
+      },
+      {
+        "level": "Master's",
+        "percentage": 15,
+        "affinity": 190,
+        "yoyChange": -4
+      },
+      {
+        "level": "Doctorate",
+        "percentage": 9,
+        "affinity": 130,
+        "yoyChange": -1
+      }
+    ],
+    "household": [
+      {
+        "type": "Single",
+        "percentage": 16,
+        "affinity": 88,
+        "size": 1,
+        "incomeLevel": "Medium"
+      },
+      {
+        "type": "Couple",
+        "percentage": 14,
+        "affinity": 116,
+        "size": 2,
+        "incomeLevel": "Medium"
+      },
+      {
+        "type": "Family with Children",
+        "percentage": 17,
+        "affinity": 128,
+        "size": 3,
+        "incomeLevel": "Medium"
+      },
+      {
+        "type": "Multi-generational",
+        "percentage": 30,
+        "affinity": 106,
+        "size": 7,
+        "incomeLevel": "Medium"
+      },
+      {
+        "type": "Shared",
+        "percentage": 23,
+        "affinity": 119,
+        "size": 4,
+        "incomeLevel": "Medium"
+      }
+    ]
+  },
+  "taxonomyAttributes": {
+    "category": "demographic",
+    "confidence": "high"
+  },
+  "estReach": 701807,
+  "cpm": 12,
+  "cpmCap": 41,
+  "programmaticMediaPct": 71,
+  "advertiserDirectPct": 20,
+  "dataSource": "Acxiom",
+  "metadata": "Generated segment for Acxiom Real Identity"
+}
