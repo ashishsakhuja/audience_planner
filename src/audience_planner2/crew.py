@@ -12,10 +12,13 @@ class AudiencePlannerCrew:
     def __init__(self, input_values=None):
         super().__init__()
         self.input_values = input_values or {}
-        with open("config/agents.yaml", "r") as f:
+
+        config_path = os.path.join(os.path.dirname(__file__), "config", "agents.yaml")
+        with open(config_path, "r") as f:
             self.agents_config = yaml.safe_load(f)
 
-        with open("config/tasks.yaml", "r") as f:
+        config_path = os.path.join(os.path.dirname(__file__), "config", "tasks.yaml")
+        with open(config_path, "r") as f:
             self.tasks_config = yaml.safe_load(f)
 
     @agent
