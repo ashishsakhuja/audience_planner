@@ -1,20 +1,35 @@
 find_audience_segment:
   description: >
     Analyze the following targeting query: {query}.
-    Use the audience segment data from the knowledge base to identify and rank the best matching segments.
-    Only use segments listed - do not invent or fabricate new ones.
-    Use the correct names, do not invent or fabricate new ones.
-    
-    Each segment has attributes like:
-    - name
-    - age_ranges
-    - income levels
-    - engagement recency
+    You are provided with an official list of valid segment names.
+    You MUST select 3–5 names directly from that list — no variations or creativity are allowed.
+
+    ❌ Do NOT make up new segment names.
+    ❌ Do NOT include explanations, age, income, CPM, or rationale.
+    ✅ Only return segment names *exactly* as written in the list.
+
+    === OFFICIAL SEGMENT LIST ===
+    {valid_segment_names}
+    =================================
+
   expected_output: |
-    Return results in Markdown format with:
-    - Segment name
-    - Age group, income range, engagement recency
-    - Reach and CPM
-    - A short rationale for each
+    Return a numbered list with only exact segment names, like this:
+
+    1. Core Audience - High-Confidence
+    2. Target Segment - Validated
+    3. Premium Segment - Emerging
   agent: segment_agent
 
+enrich_segments:
+  description: |
+    Expand each of the validated segment names into a full profile using attributes like age, income, and rationale.
+
+  prompt: |
+    === SEGMENT NAMES TO ENRICH ===
+    {find_audience_segment}
+
+  expected_output: |
+    Markdown block with the above format for each segment.
+
+  agent: enrichment_agent
+  depends_on: find_audience_segment

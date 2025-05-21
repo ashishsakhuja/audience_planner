@@ -16,10 +16,11 @@ def run():
     Run the crew.
     """
     inputs = {
-        'query': 'users in rural areas with variable income and seasonal engagement spikes'
+        'query': 'middle aged adults with high income and low engagement'
     }
     
     try:
+        inputs["valid_segment_names"] = AudiencePlannerCrew().valid_segment_names
         result = AudiencePlannerCrew().crew().kickoff(inputs=inputs)
         print("\nRecommended Audience Segments:\n", result)
     except Exception as e:

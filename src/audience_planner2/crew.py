@@ -4,8 +4,31 @@ from crewai.knowledge.source.json_knowledge_source import JSONKnowledgeSource
 import os
 from dotenv import load_dotenv
 import yaml
+import json
+from pathlib import Path
 
 load_dotenv()
+
+def load_valid_segment_names(knowledge_dir):
+    valid_names = set()
+    json_files = list(Path(knowledge_dir).rglob("*.json"))
+
+    for path in json_files:
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    if "name" in data:
+                        valid_names.add(data["name"])
+                elif isinstance(data, list):
+                    for entry in data:
+                        if isinstance(entry, dict) and "name" in entry:
+                            valid_names.add(entry["name"])
+            except json.JSONDecodeError:
+                print(f"[WARNING] Skipping invalid JSON file: {path}")
+            except Exception as e:
+                print(f"[ERROR] Unexpected issue in file {path}: {e}")
+    return sorted(valid_names)
 
 @CrewBase
 class AudiencePlannerCrew:
@@ -13,40 +36,56 @@ class AudiencePlannerCrew:
         super().__init__()
         self.input_values = input_values or {}
 
-        config_path = os.path.join(os.path.dirname(__file__), "config", "agents.yaml")
-        with open(config_path, "r") as f:
+        base_path = os.path.dirname(__file__)
+        with open(os.path.join(base_path, "config", "agents.yaml"), "r", encoding="utf-8") as f:
             self.agents_config = yaml.safe_load(f)
-
-        config_path = os.path.join(os.path.dirname(__file__), "config", "tasks.yaml")
-        with open(config_path, "r") as f:
+        with open(os.path.join(base_path, "config", "tasks.yaml"), "r", encoding="utf-8") as f:
             self.tasks_config = yaml.safe_load(f)
+
+        self.knowledge_path = os.path.abspath(
+            os.path.join(base_path, "..", "..", "knowledge", "Acxiom-Real-Identity")
+        )
+        self.valid_segment_names = load_valid_segment_names(self.knowledge_path)
+        print("[DEBUG] Valid Segment Names:", self.valid_segment_names[:5])
+        print(f"[DEBUG] Total valid segment names loaded: {len(self.valid_segment_names)}")
+        self.input_values["valid_segment_names"] = self.valid_segment_names
 
     @agent
     def segment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["segment_agent"],
+            verbose=True,
+            input_values={"valid_segment_names": self.valid_segment_names}
+        )
+
+    @agent
+    def enrichment_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["enrichment_agent"],
             verbose=True
         )
 
     @task
     def find_audience_segment(self) -> Task:
         return Task(
-            config=self.tasks_config["find_audience_segment"]
+            config=self.tasks_config["find_audience_segment"],
+            input_values={"valid_segment_names": self.valid_segment_names}
+        )
+
+    @task
+    def enrich_segments(self) -> Task:
+        return Task(
+            config=self.tasks_config["enrich_segments"]
         )
 
     @crew
     def crew(self) -> Crew:
-        from pathlib import Path
-
-        knowledge_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "..", "knowledge", "Acxiom-Real-Identity")
+        knowledge_source = JSONKnowledgeSource(
+            file_paths=list(Path(self.knowledge_path).rglob("*.json"))
         )
-        json_files = list(Path(knowledge_path).rglob("*.json"))
-        knowledge_source = JSONKnowledgeSource(file_paths=json_files)
-
         return Crew(
             agents=self.agents,
-            tasks=self.tasks,
+            tasks=[self.find_audience_segment(), self.enrich_segments()],
             process=Process.sequential,
             verbose=True,
             knowledge_sources=[knowledge_source],
