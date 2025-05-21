@@ -65,6 +65,13 @@ class AudiencePlannerCrew:
             verbose=True
         )
 
+    @agent
+    def verification_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["verification_agent"],
+            verbose=True
+        )
+
     @task
     def find_audience_segment(self) -> Task:
         return Task(
@@ -78,6 +85,10 @@ class AudiencePlannerCrew:
             config=self.tasks_config["enrich_segments"]
         )
 
+    @task
+    def validate_enriched_segments(self) -> Task:
+        return Task(config=self.tasks_config["validate_enriched_segments"])
+
     @crew
     def crew(self) -> Crew:
         knowledge_source = JSONKnowledgeSource(
@@ -85,7 +96,11 @@ class AudiencePlannerCrew:
         )
         return Crew(
             agents=self.agents,
-            tasks=[self.find_audience_segment(), self.enrich_segments()],
+            tasks=[
+                self.find_audience_segment(),
+                self.enrich_segments(),
+                self.validate_enriched_segments()
+            ],
             process=Process.sequential,
             verbose=True,
             knowledge_sources=[knowledge_source],

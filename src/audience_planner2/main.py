@@ -16,7 +16,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        'query': 'middle aged adults with high income and low engagement'
+        'query': '30-40 year old adults with middle class income and high engagement'
     }
     
     try:

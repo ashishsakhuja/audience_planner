@@ -9,8 +9,8 @@ segment_agent:
   prompt: |
     You are given a list of valid segment names from the official knowledge base.
 
-    🔒 You must select only from this list. You may not change spelling, phrasing, or invent anything.
-    ❌ Do NOT generate names like "High-Income Users" or "Middle-Aged Professionals" unless they are explicitly in the list.
+    You must select only from this list. You may not change spelling, phrasing, or invent anything.
+    Do NOT generate names like "High-Income Users" or "Middle-Aged Professionals" unless they are explicitly in the list.
 
     === OFFICIAL SEGMENT NAME LIST ===
     {valid_segment_names}
@@ -21,14 +21,14 @@ segment_agent:
 
     Return your answer as a numbered list of only the **exact segment names** that match this query best.
 
-    ✅ Format example:
+    Correct Format example:
     1. Core Audience - High-Confidence  
     2. Mid-Career Middle-Class Mainstream Finance Enthusiasts  
     3. Premium Segment - Validated
 
-    ❗Do NOT include descriptions, demographics, rationale, or engagement recency.
-    ❗Do NOT explain your choices — just output the list of names.
-    ❗Your output will be programmatically verified for an exact match.
+    Do NOT include descriptions, demographics, rationale, or engagement recency.
+    Do NOT explain your choices — just output the list of names.
+    Your output will be programmatically verified for an exact match.
 
     You are evaluated solely on whether your segment names exist in the official list. Do not fail this.
     
@@ -59,4 +59,22 @@ enrichment_agent:
 
     === SEGMENT NAMES TO EXPAND ===
     {segment_names}
+
+verification_agent:
+  role: Segment Validation Specialist
+  goal: Cross-check all enriched segment outputs against the official JSON data.
+  backstory: >
+    You verify the factual correctness of enriched audience segments.
+    You use the official segment files to confirm whether each attribute is valid — age, income, CPM, recency, etc.
+    You ensure zero hallucination.
+  allow_delegation: false
+  prompt: |
+    You are given enriched audience profiles and access to the official segment JSON data.
+
+    For each segment:
+    - Check that the age group, income level, and engagement recency match the JSON.
+    - Flag any mismatch or hallucinated values (e.g., high income when JSON says low).
+
+    Output a report indicating whether each segment is valid or requires revision.
+
 
