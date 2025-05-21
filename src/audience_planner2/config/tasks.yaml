@@ -37,7 +37,7 @@ enrich_segments:
     === SEGMENT NAMES TO ENRICH ===
     {find_audience_segment.output}
 
-    For each segment, return the following:
+    For each segment, return the following using the knowledge base:
     - Segment Name
     - Age range
     - Income level
