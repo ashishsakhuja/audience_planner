@@ -36,10 +36,14 @@ enrich_segments:
   prompt: |
     === SEGMENT NAMES TO ENRICH ===
     {find_audience_segment.output}
-
-    For each segment, return the following using the knowledge base:
+    DO NOT make any assumptions or guess attributes.
+    If an attribute is not in the knowledge base, return N/A for the attribute
+    If there are multiple of an attribute, choose the one or one(s) which best fit the query: {query}
+    For each segment, return the following attributes using ONLY the knowledge base.
     - Segment Name
     - Age range
+    - Gender
+    - Education
     - Income level
     - Engagement recency
     - Estimated reach
@@ -51,8 +55,8 @@ enrich_segments:
     Return Markdown like this:
 
     ### Segment: Target Segment - Validated
-    - Age range: 45–54  
-    - Income: High  
+    - Age range: 24-34 
+    - Income: Middle Class  
     - Engagement recency: Low  
     - Estimated reach: 5 million  
     - CPM: $15  
@@ -67,8 +71,12 @@ validate_enriched_segments:
     You are a strict validator. First, check if each enriched segment name exactly matches one of the official names:
     {valid_segment_names}
 
-    Then, validate whether the enriched attributes match the query criteria:
+    Then, validate whether the enriched attributes match the query:
     {query}
+    
+    Then, validate whether the enriched attributes match the knowledge base.
+    If an attribute does not match the knowledge base, update the attribute to the correct one.
+    DO NOT assume or guess any attributes.
 
     For each enriched segment:
     {enrich_segments.output}
@@ -78,7 +86,8 @@ validate_enriched_segments:
     - If the name is not valid, mark it Invalid and request revision.
 
   expected_output: |
-    For each segment, return the full Markdown block from enrichment, followed by validation:
+    For each segment, return the full Markdown block from enrichment, followed by validation.
+    Example output:
     
     ### Segment: Target Segment - Validated
     - Age range: 35–44  

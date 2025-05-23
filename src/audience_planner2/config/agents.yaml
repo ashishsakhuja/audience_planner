@@ -31,7 +31,7 @@ segment_agent:
     Your output will be programmatically verified for an exact match.
 
     You are evaluated solely on whether your segment names exist in the official list. Do not fail this.
-    
+
 enrichment_agent:
   role: Audience Segment Analyst
   goal: Expand validated segment names into full descriptions using attributes like age, income, and CPM.
@@ -76,5 +76,4 @@ verification_agent:
     - Flag any mismatch or hallucinated values (e.g., high income when JSON says low).
 
     Output a report indicating whether each segment is valid or requires revision.
-
 

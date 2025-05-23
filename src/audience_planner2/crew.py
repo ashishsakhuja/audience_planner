@@ -9,6 +9,10 @@ from pathlib import Path
 
 load_dotenv()
 
+current_file = os.path.abspath(__file__)
+project_root = os.path.dirname(os.path.dirname(current_file))
+
+
 def load_valid_segment_names(knowledge_dir):
     valid_names = set()
     json_files = list(Path(knowledge_dir).rglob("*.json"))
@@ -30,6 +34,7 @@ def load_valid_segment_names(knowledge_dir):
                 print(f"[ERROR] Unexpected issue in file {path}: {e}")
     return sorted(valid_names)
 
+
 @CrewBase
 class AudiencePlannerCrew:
     def __init__(self, input_values=None):
@@ -50,26 +55,37 @@ class AudiencePlannerCrew:
         print(f"[DEBUG] Total valid segment names loaded: {len(self.valid_segment_names)}")
         self.input_values["valid_segment_names"] = self.valid_segment_names
 
+        self.json_knowledge_source = JSONKnowledgeSource(
+            file_paths=list(Path(self.knowledge_path).rglob("*.json"))
+        )
+
+        print(f"[DEBUG] JSON files loaded into knowledge source: {len(self.json_knowledge_source.file_paths)}")
+        for f in self.json_knowledge_source.file_paths[:5]:
+            print(f"[DEBUG] → {os.path.basename(f)}")
+
     @agent
     def segment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["segment_agent"],
             verbose=True,
-            input_values={"valid_segment_names": self.valid_segment_names}
+            input_values={"valid_segment_names": self.valid_segment_names},
+            knowledge_source=[self.json_knowledge_source]
         )
 
     @agent
     def enrichment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["enrichment_agent"],
-            verbose=True
+            verbose=True,
+            knowledge_source=[self.json_knowledge_source]
         )
 
     @agent
     def verification_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["verification_agent"],
-            verbose=True
+            verbose=True,
+            knowledge_source=[self.json_knowledge_source]
         )
 
     @task
@@ -91,9 +107,6 @@ class AudiencePlannerCrew:
 
     @crew
     def crew(self) -> Crew:
-        knowledge_source = JSONKnowledgeSource(
-            file_paths=list(Path(self.knowledge_path).rglob("*.json"))
-        )
         return Crew(
             agents=self.agents,
             tasks=[
@@ -103,6 +116,6 @@ class AudiencePlannerCrew:
             ],
             process=Process.sequential,
             verbose=True,
-            knowledge_sources=[knowledge_source],
+            knowledge_sources=[self.json_knowledge_source],
             input_values=self.input_values
         )
