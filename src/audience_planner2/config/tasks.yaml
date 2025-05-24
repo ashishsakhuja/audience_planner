@@ -1,106 +1,33 @@
-find_audience_segment:
+select_segment_task:
   description: >
-    Analyze the following targeting query: {query}.
-    You are provided with an official list of valid segment names.
-    You MUST select 3–5 names directly from that list — no variations or creativity are allowed.
+    Recommend the top audience segments that best match the campaign query: "{query}".
+    Use only the indexed data from the segments.json file and never invent names or traits.
 
-    Do NOT make up new segment names.
-    Do NOT include explanations, age, income, CPM, or rationale.
-    Only return segment names *exactly* as written in the list.
+    Prioritize segments that match:
+    1. Demographic fit (age, income, location)
+    2. Recency of engagement
+    3. Confidence and CPM
 
-    === OFFICIAL SEGMENT LIST ===
-    {valid_segment_names}
-    =================================
-  prompt: |
-    You have access to structured knowledge about audience segments (age, income, engagement recency, etc.).
-
-    Use this information to recommend 3–5 segments that best match the query:
-    {query}
-
-    Return only the segment names as listed in the official records.
-
-  expected_output: |
-    Return a numbered list with only exact segment names, like this:
-
-    1. Core Audience - High-Confidence
-    2. Target Segment - Validated
-    3. Premium Segment - Emerging
-
+    Return each with:
+    - Name
+    - Age Range
+    - Income Level
+    - Location Type
+    - Recency
+    - CPM
+    - Confidence
+    - Estimated Reach
+  expected_output: >
+    A markdown formatted list of the top 3–5 recommended segments, including all specified fields.
   agent: segment_agent
 
-enrich_segments:
+validate_segment_task:
   description: >
-    Expand each of the validated segment names into a full profile using attributes like age, income, engagement recency, estimated reach, and CPM.
-    Give a confidence level on a scale of 10.
+    Validate whether the recommended segments truly align with the campaign query: "{query}".
+    Cross-check all traits (age range, income, recency, CPM) against the official segment data.
 
-  prompt: |
-    === SEGMENT NAMES TO ENRICH ===
-    {find_audience_segment.output}
-    DO NOT make any assumptions or guess attributes.
-    If an attribute is not in the knowledge base, return N/A for the attribute
-    If there are multiple of an attribute, choose the one or one(s) which best fit the query: {query}
-    For each segment, return the following attributes using ONLY the knowledge base.
-    - Segment Name
-    - Age range
-    - Gender
-    - Education
-    - Income level
-    - Engagement recency
-    - Estimated reach
-    - CPM
-    - Confidence score (out of 10)
-    - Rationale
-
-  expected_output: |
-    Return Markdown like this:
-
-    ### Segment: Target Segment - Validated
-    - Age range: 24-34 
-    - Income: Middle Class  
-    - Engagement recency: Low  
-    - Estimated reach: 5 million  
-    - CPM: $15  
-    - Confidence: 9/10  
-    - Rationale: [Insert reason why this segment fits the original query.]
-
-  agent: enrichment_agent
-  depends_on: find_audience_segment
-
-validate_enriched_segments:
-  description: |
-    You are a strict validator. First, check if each enriched segment name exactly matches one of the official names:
-    {valid_segment_names}
-
-    Then, validate whether the enriched attributes match the query:
-    {query}
-    
-    Then, validate whether the enriched attributes match the knowledge base.
-    If an attribute does not match the knowledge base, update the attribute to the correct one.
-    DO NOT assume or guess any attributes.
-
-    For each enriched segment:
-    {enrich_segments.output}
-
-    - If the name is valid AND all attributes match the query, mark it Valid.
-    - If the name is valid but any attributes mismatch the query, mark it Semi-valid and list mismatched fields.
-    - If the name is not valid, mark it Invalid and request revision.
-
-  expected_output: |
-    For each segment, return the full Markdown block from enrichment, followed by validation.
-    Example output:
-    
-    ### Segment: Target Segment - Validated
-    - Age range: 35–44  
-    - Income: Upper-middle to High  
-    - Engagement recency: Moderate  
-    - Estimated reach: 5 million  
-    - CPM: $15  
-    - Confidence: 9/10  
-    - Rationale: This segment broadly overlaps with the age range, but is too high-income and moderately engaged.
-    
-    **Validation:**
-    - Validity: Semi-valid  
-    - Mismatched fields: Income (expected: Low), Engagement (expected: Low)  
-    - Recommendation: Ask segment agent to revise for stricter alignment with the original query.
-  agent: verification_agent
-  depends_on: enrich_segments
+    If any segment does not match the query traits, clearly list the mismatches.
+  expected_output: >
+    A validation report in markdown format, confirming valid segments and listing any mismatches with reasons.
+  agent: verifier_agent
+  depends_on: [select_segment_task]
