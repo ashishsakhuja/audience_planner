@@ -10,6 +10,7 @@ select_segment_task:
 
     Return each with:
     - Name
+    - TaxonomyId
     - Age Range
     - Income Level
     - Location Type
@@ -24,7 +25,7 @@ select_segment_task:
 validate_segment_task:
   description: >
     Validate whether the recommended segments truly align with the campaign query: "{query}".
-    Cross-check all traits (age range, income, recency, CPM) against the official segment data.
+    Cross-check all traits (taxonomyId, age range, income, recency, CPM) against the official segment data.
 
     If any segment does not match the query traits, clearly list the mismatches.
   expected_output: >
