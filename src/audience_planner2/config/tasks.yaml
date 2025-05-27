@@ -27,8 +27,17 @@ validate_segment_task:
     Validate whether the recommended segments truly align with the campaign query: "{query}".
     Cross-check all traits (taxonomyId, age range, income, recency, CPM) against the official segment data.
 
-    If any segment does not match the query traits, clearly list the mismatches.
+    For each segment, include:
+    - Name
+    - TaxonomyId
+    - Age Range: Matches or Mismatch (with reasoning)
+    - Income Level: Matches or Mismatch (with reasoning)
+    - Location Type: Matches or Mismatch (with reasoning)
+    - Recency: Matches or Mismatch (with reasoning)
+    - CPM: Matches or Mismatch (with reasoning, if applicable)
+
   expected_output: >
-    A validation report in markdown format, confirming valid segments and listing any mismatches with reasons.
+    A markdown-formatted validation report for each segment, showing all fields above. If a segment has any mismatch, specify the reason. End the report with a summary listing which segments are fully valid.
   agent: verifier_agent
   depends_on: [select_segment_task]
+
