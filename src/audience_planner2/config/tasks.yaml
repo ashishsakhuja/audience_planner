@@ -1,47 +1,58 @@
 select_segment_task:
   description: >
     Recommend the top audience segments that best match the campaign query: "{query}".
-    Use only the indexed data from the segments.json file and never invent names or traits.
+
+    Use only the fields present in the segments.json file. Do not infer, invent, or assume any field value.
+    Only select from the exact segment names and attributes loaded into memory.
 
     Prioritize segments that match:
-    1. Demographic fit (age, income, location)
-    2. Recency of engagement
-    3. Confidence and CPM
+    1. age_range
+    2. income_level
+    3. location_type
+    4. recency
+    5. taxonomyId
 
-    Return each with:
-    - Name
-    - TaxonomyId
-    - Age Range
-    - Income Level
-    - Location Type
-    - Recency
-    - CPM
-    - Confidence
-    - Estimated Reach
+    Return your output in the following format (do not change casing or labels):
+
+    - **name**: [segment name]
+    - **taxonomyId**: [value]
+    - **age_range**: [value]
+    - **income_level**: [value]
+    - **location_type**: [value]
+    - **recency**: [value]
+    - **cpm**: [value]
+    - **confidence**: [value]
+    - **estimated_reach**: [value]
+
   expected_output: >
-    A markdown formatted list of the top 3–5 recommended segments, including all specified fields.
+    A markdown-formatted list of 3–5 segments that most closely match the campaign criteria, using only the official segment data.
   agent: segment_agent
 
 validate_segment_task:
   description: >
-    Validate whether the recommended segments truly align with the campaign query: "{query}".
-    Cross-check all traits (taxonomyId, age range, income level, location type, recency, and CPM) against the official segment data.
+    Validate whether the recommended segments match the campaign query: "{query}".
 
-    For each recommended segment, output the following:
+    For each recommended segment, cross-check every field with the source data (age_range, income_level, location_type, recency, taxonomyId, cpm).
+    Do not guess or infer values.
 
-    - **Name**
-    - **TaxonomyId**
-    - **Validation Status**: Valid / Not Valid / Closest Match
-    - **Age Range**: Matches or Mismatch (explanation)
-    - **Income Level**: Matches or Mismatch (explanation)
-    - **Location Type**: Matches or Mismatch (explanation)
-    - **Recency**: Matches or Mismatch (explanation)
-    - **CPM**: Matches or Mismatch (explanation, if applicable)
-    - **Confidence**: Mention if confidence is high or low
+    Only flag CPM or confidence as a mismatch if the campaign query explicitly defines required thresholds.
 
-    Then conclude with a summary stating which segments are fully valid, partially valid (closest), or invalid.
+    Return your output in this exact field-by-field markdown format per segment:
+
+    - **name**: [segment name]
+    - **taxonomyId**: [value] - Matches / Mismatch (explanation)
+    - **age_range**: [value] - Matches / Mismatch (explanation)
+    - **income_level**: [value] - Matches / Mismatch (explanation)
+    - **location_type**: [value] - Matches / Mismatch (explanation)
+    - **recency**: [value] - Matches / Mismatch (explanation)
+    - **cpm**: [value] - Matches / Mismatch (explanation if applicable)
+    - **confidence**: [value] (state if high, medium, or low — do not flag unless required)
+
+    End with a summary like:
+
+     **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
 
   expected_output: >
-    A structured markdown report with a section for each segment, showing field-by-field match analysis as described above. Do not summarize everything in one paragraph — each segment must have its own bullet list.
+    A structured markdown validation report with a dedicated section for each segment. Do not combine all feedback into a single paragraph.
   agent: verifier_agent
   depends_on: [select_segment_task]

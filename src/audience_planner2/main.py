@@ -16,7 +16,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        'query': 'Target audience is middle-income suburban users between 35–44 years old with recent engagement in the past week.'
+        'query': 'Find urban users aged 25–34 with low income and engagement within the last 30 days'
     }
     
     try:
