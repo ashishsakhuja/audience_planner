@@ -39,7 +39,8 @@ validate_segment_task:
 
     Return your output in this exact field-by-field markdown format per segment:
 
-    - **name**: [segment name]
+    ### [segment name]
+    
     - **taxonomyId**: [value] - Matches / Mismatch (explanation)
     - **age_range**: [value] - Matches / Mismatch (explanation)
     - **income_level**: [value] - Matches / Mismatch (explanation)
