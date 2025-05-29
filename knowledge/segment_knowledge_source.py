@@ -11,9 +11,9 @@ class SegmentKnowledgeSource(BaseKnowledgeSource):
 
     def __init__(self, **kwargs):
         root_path = Path(__file__).resolve().parents[1]
-        segments_path = root_path / "segments.json"
+        segments_path = root_path / "segments2.json"
 
-        print(f"[DEBUG] FORCED segments.json path: {segments_path.resolve()}")
+        print(f"[DEBUG] FORCED segments2.json path: {segments_path.resolve()}")
         kwargs["file_path"] = segments_path
 
         super().__init__(**kwargs)
@@ -27,10 +27,10 @@ class SegmentKnowledgeSource(BaseKnowledgeSource):
 
             chunks = {}
             for segment in segments:
-                name = segment.get("name")
+                id = segment.get("taxonomyId")
                 formatted = self._format(segment)
-                if name and formatted:
-                    chunks[name] = formatted
+                if id and formatted:
+                    chunks[id] = formatted
 
             print(f"[DEBUG] Loaded {len(chunks)} segments.")
             return chunks
@@ -51,9 +51,10 @@ class SegmentKnowledgeSource(BaseKnowledgeSource):
     def _format(self, seg: dict) -> str:
         demographics = seg.get("demographics", {})
         criteria = seg.get("segmentCriteria", {}).get("filters", {})
+        print(seg.get("taxonomyId"))
         return f"""
 Name: {seg.get("name")}
-Taxonomy: {seg.get("taxonomyId")}
+Taxonomy ID: {seg.get("taxonomyId")} # UUID - DO NOT GUESS
 Graph: {seg.get("identityGraphName")}
 Age Range: {demographics.get("age_range")}
 Income Level: {demographics.get("income_level")}

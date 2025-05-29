@@ -5,7 +5,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 
 # Load your segment knowledge source
-segment_knowledge = SegmentKnowledgeSource(file_path="segments.json")
+segment_knowledge = SegmentKnowledgeSource()
 
 @CrewBase
 class AudiencePlannerCrew():
@@ -20,7 +20,8 @@ class AudiencePlannerCrew():
             config=self.agents_config['segment_agent'],
             knowledge_sources=[segment_knowledge],
             llm=LLM(model="gpt-4", temperature=0),
-            verbose=True
+            verbose=True,
+            memory=False
         )
 
     @agent
@@ -29,7 +30,8 @@ class AudiencePlannerCrew():
             config=self.agents_config['verifier_agent'],
             knowledge_sources=[segment_knowledge],
             llm=LLM(model="gpt-4", temperature=0),
-            verbose=True
+            verbose=True,
+            memory=False
         )
 
     @task
