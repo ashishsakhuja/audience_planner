@@ -56,5 +56,7 @@ class AudiencePlannerCrew():
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
-            knowledge_sources=[segment_knowledge]
+            knowledge_sources=[segment_knowledge],
+            storage_path="./chroma_clean_reset"
         )
+

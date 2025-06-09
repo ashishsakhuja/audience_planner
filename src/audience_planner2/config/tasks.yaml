@@ -1,6 +1,8 @@
 select_segment_task:
   description: >
-    Recommend the top audience segments that best match the campaign query: "{query}".
+    Recommend all audience segments that closely match the campaign query: "{query}".
+    Review **all** segments loaded from the official knowledge source, not just the top matches.
+    Do not limit the number of segments returned. if 5, 10, or more segments are relevant, include all of them.
 
     Use only the fields present in the official knowledge source file. Do not infer, invent, or assume any field value.
     Only select from the exact segment names and attributes loaded into memory.
@@ -27,7 +29,8 @@ select_segment_task:
     - **estimated_reach**: [value]
 
   expected_output: >
-    A markdown-formatted list of 3–5 segments that most closely match the campaign criteria, using only the official segment data.
+    A markdown-formatted list of segments that most closely match the campaign criteria, using only the official segment data.
+    You may return as many segments as are relevant. Do not limit your output to 3 segments.
   agent: segment_agent
 
 
@@ -39,20 +42,29 @@ validate_segment_task:
     Do not guess or infer values.
 
     IMPORTANT: taxonomyId must match the exact UUID from segment.taxonomyId. Do not repeat or reuse IDs across segments.
-
-    Only flag CPM or confidence as a mismatch if the campaign query explicitly defines required thresholds.
+    IMPORTANT: Only flag mismatches if the campaign query explicitly defines required thresholds.
+    IMPORTANT: You must include ALL fields below for each segment, even if they are not present in the data. If any value is missing, write "Not provided" explicitly.
 
     Return your output in this exact field-by-field markdown format per segment:
 
     ### [segment name]
 
-    - **taxonomyId**: [UUID] (explanation)
+    - **Audience Segment Id**: [UUID]
+    - **identityGraphName**: [value]
     - **age_range**: [value] - Matches / Mismatch (explanation)
+    - **size**: [value] - Matches / Mismatch (explanation)
     - **income_level**: [value] - Matches / Mismatch (explanation)
     - **location_type**: [value] - Matches / Mismatch (explanation)
     - **recency**: [value] - Matches / Mismatch (explanation)
     - **cpm**: [value] - Matches / Mismatch (explanation if applicable)
+    - **cpmCap** [value] - Matches / Mismatch (explanation if applicable)
+    - **estReach**: [value] - Matches / Mismatch (explanation if applicable)
+    - **programmaticMediaPct**: [value] - Matches / Mismatch (explanation)
+    - **advertiserDirectPct**: [value] - Matches / Mismatch (explanation)
     - **confidence**: [value] (state if high, medium, or low — do not flag unless required)
+    - **category**: [value] (explanation if applicable)
+    - **quality_score**: [value] (explanation)
+    - **data_source**: [value] - Matches / Mismatch (explanation if applicable)
 
     End with a summary like:
 
