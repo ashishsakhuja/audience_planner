@@ -41,7 +41,7 @@ validate_segment_task:
     For each recommended segment, cross-check every field with the source data (age_range, income_level, location_type, recency, taxonomyId, cpm).
     Do not guess or infer values.
 
-    IMPORTANT: taxonomyId must match the exact UUID from segment.taxonomyId. Do not repeat or reuse IDs across segments.
+    IMPORTANT: segmentId must match the exact UUID from segment.segmentId. Do not repeat or reuse IDs across segments.
     IMPORTANT: Only flag mismatches if the campaign query explicitly defines required thresholds.
     IMPORTANT: You must include ALL fields below for each segment, even if they are not present in the data. If any value is missing, write "Not provided" explicitly.
 
@@ -71,6 +71,29 @@ validate_segment_task:
     **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
 
   expected_output: >
-    A structured markdown validation report with a dedicated section for each segment. Do not combine all feedback into a single paragraph.
+    Return your output in this exact field-by-field markdown format per segment:
+
+    ### [segment name]
+
+    - **Audience Segment Id**: [UUID]
+    - **identityGraphName**: [value]
+    - **age_range**: [value] - Matches / Mismatch (explanation)
+    - **size**: [value] - Matches / Mismatch (explanation)
+    - **income_level**: [value] - Matches / Mismatch (explanation)
+    - **location_type**: [value] - Matches / Mismatch (explanation)
+    - **recency**: [value] - Matches / Mismatch (explanation)
+    - **cpm**: [value] - Matches / Mismatch (explanation if applicable)
+    - **cpmCap** [value] - Matches / Mismatch (explanation if applicable)
+    - **estReach**: [value] - Matches / Mismatch (explanation if applicable)
+    - **programmaticMediaPct**: [value] - Matches / Mismatch (explanation)
+    - **advertiserDirectPct**: [value] - Matches / Mismatch (explanation)
+    - **confidence**: [value] (state if high, medium, or low — do not flag unless required)
+    - **category**: [value] (explanation if applicable)
+    - **quality_score**: [value] (explanation)
+    - **data_source**: [value] - Matches / Mismatch (explanation if applicable)
+
+    End with a summary like:
+
+    **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
   agent: verifier_agent
   depends_on: [select_segment_task]

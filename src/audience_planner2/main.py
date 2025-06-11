@@ -2,8 +2,11 @@
 import sys
 import warnings
 from datetime import datetime
-from audience_planner2.crew import AudiencePlannerCrew
+import numpy as np
 
+np.float_ = np.float64
+np.uint = np.uint64
+from audience_planner2.crew import AudiencePlannerCrew
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # This main file is intended to be a way for you to run your

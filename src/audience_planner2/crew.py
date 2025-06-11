@@ -1,44 +1,69 @@
-from crewai import Agent, Task, Crew, Process, LLM
-from knowledge.segment_knowledge_source import SegmentKnowledgeSource
-from crewai.project import CrewBase, agent, crew, task
-from crewai.agents.agent_builder.base_agent import BaseAgent
-from typing import List
+# src/audience_planner2/crew.py
 
-# Load your segment knowledge source
-segment_knowledge = SegmentKnowledgeSource()
+from typing import List, Dict, Any
+import os, logging
+from crewai import Agent, Crew, Process, Task, LLM
+from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
+from crewai.agents.agent_builder.base_agent import BaseAgent
+from dotenv import load_dotenv
+from audience_planner2.tools.sql_query_tool import SegmentSQLTool
+
+
+llm = LLM(model="gpt-4", temperature=0.0)
 
 @CrewBase
-class AudiencePlannerCrew():
-    """Audience segment planning crew"""
+class AudiencePlannerCrew:
+    """Audience segment planning crew using SQL-backed lookups."""
 
     agents: List[BaseAgent]
     tasks: List[Task]
+    tools = [SegmentSQLTool()]
+
+    # point to your YAML configs
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'config/tasks.yaml'
+
+    def __init__(self):
+        super().__init__()
+        load_dotenv()
+        logging.basicConfig(level=logging.INFO)
+        self.sql_tool = SegmentSQLTool()
+
+    @before_kickoff
+    def setup(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
+        if 'query' not in inputs:
+            raise ValueError("Missing required 'query'")
+        inputs['start_ts'] = os.getenv("RUN_TIMESTAMP", "")
+        logging.info(f"Starting with query: {inputs['query']}")
+        return inputs
 
     @agent
     def segment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['segment_agent'],
-            knowledge_sources=[segment_knowledge],
-            llm=LLM(model="gpt-4", temperature=0),
+            llm=llm,
+            tools=[self.sql_tool],
             verbose=True,
-            memory=False
+            memory=False,
         )
 
     @agent
     def verifier_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['verifier_agent'],
-            knowledge_sources=[segment_knowledge],
-            llm=LLM(model="gpt-4", temperature=0),
+            llm=llm,
+            tools=[self.sql_tool],
             verbose=True,
-            memory=False
+            memory=False,
         )
 
     @task
     def select_segment_task(self) -> Task:
         return Task(
             config=self.tasks_config['select_segment_task'],
-            output_file='selected_segments.md'
+            output_file='selected_segments.md',
+            tools=[self.sql_tool],
+            markdown=True
         )
 
     @task
@@ -46,7 +71,9 @@ class AudiencePlannerCrew():
         return Task(
             config=self.tasks_config['validate_segment_task'],
             output_file='validation_report.md',
-            depends_on=[self.select_segment_task]
+            depends_on=[self.select_segment_task],
+            tools=[self.sql_tool],
+            markdown=True
         )
 
     @crew
@@ -56,7 +83,8 @@ class AudiencePlannerCrew():
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
-            knowledge_sources=[segment_knowledge],
-            storage_path="./chroma_clean_reset"
+            tools=[self.sql_tool],
+            max_rpm=30
         )
+
 
