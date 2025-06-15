@@ -40,12 +40,17 @@ class SegmentSQLTool(BaseTool):
     args_schema: type[BaseModel] = SQLQueryInput
 
     def _run(self, query: str) -> str:
-        try:
+        q = query.strip()
+
+        if q.lower().startswith("select"):
+            # Always leave the user's SELECT exactly as-is (minus a trailing semicolon)
+            sql = q.rstrip(";") + ";"
+        else:
+            # Non-SELECT input still gets converted into SQL by your existing converter
             sql = self._convert_to_sql(query)
-            rows = self._execute_sql(sql)
-            return json.dumps(rows, indent=2, default=str)
-        except Exception as e:
-            return f"Error executing segment query: {e}"
+
+        rows = self._execute_sql(sql)
+        return json.dumps(rows, indent=2, default=str)
 
     def _convert_to_sql(self, natural: str) -> str:
         """
@@ -143,7 +148,7 @@ class SegmentSQLTool(BaseTool):
 
         # Default limit
         if "all" not in q:
-            sql += " LIMIT 13"
+            sql += " LIMIT 5"
 
         return sql
 

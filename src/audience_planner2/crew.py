@@ -7,9 +7,10 @@ from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_ki
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from dotenv import load_dotenv
 from audience_planner2.tools.sql_query_tool import SegmentSQLTool
+from audience_planner2.models import SQLString
 
 
-llm = LLM(model="gpt-4", temperature=0.0)
+llm = LLM(model="gpt-4.1-mini", temperature=0.0)
 
 @CrewBase
 class AudiencePlannerCrew:
@@ -31,11 +32,35 @@ class AudiencePlannerCrew:
 
     @before_kickoff
     def setup(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
+        import re
         if 'query' not in inputs:
             raise ValueError("Missing required 'query'")
+        query = inputs['query']
+        if not isinstance(query, str):
+            raise ValueError("'query' must be a string")
+        query = query.strip()
+        if not query:
+            raise ValueError("'query' cannot be empty or just whitespace")
+        if len(query) > 500:
+            raise ValueError("Query too long (max 500 characters)")
+        if not re.match(r"^[A-Za-z0-9\s\.,;:'\"?!\-]", query):
+            raise ValueError("Query contains invalid characters")
+
+        # everything’s safe—assign back and proceed
+        inputs['query'] = query
         inputs['start_ts'] = os.getenv("RUN_TIMESTAMP", "")
         logging.info(f"Starting with query: {inputs['query']}")
         return inputs
+
+    @agent
+    def database_guru(self) -> Agent:
+        return Agent(
+            config=self.agents_config['database_guru'],
+            llm=llm,
+            tools=[],
+            verbose=True,
+            memory=False,
+        )
 
     @agent
     def segment_agent(self) -> Agent:
@@ -58,22 +83,35 @@ class AudiencePlannerCrew:
         )
 
     @task
-    def select_segment_task(self) -> Task:
+    def generate_sql_task(self) -> Task:
+        cfg = self.tasks_config['generate_sql_task']
         return Task(
-            config=self.tasks_config['select_segment_task'],
-            output_file='selected_segments.md',
+            config=cfg,
+            output_pydantic=SQLString,
+            markdown=True,
+            tools=[]
+        )
+
+    @task
+    def select_segment_task(self) -> Task:
+        cfg = self.tasks_config['select_segment_task']
+        return Task(
+            config=cfg,
+            depends_on=[self.generate_sql_task],
             tools=[self.sql_tool],
             markdown=True
         )
 
     @task
     def validate_segment_task(self) -> Task:
+        cfg = self.tasks_config['validate_segment_task']
         return Task(
-            config=self.tasks_config['validate_segment_task'],
-            output_file='validation_report.md',
+            config=cfg,
+            prompt=cfg['description'],
             depends_on=[self.select_segment_task],
             tools=[self.sql_tool],
-            markdown=True
+            markdown=True,
+            output_file='validation_report.md'
         )
 
     @crew
@@ -84,7 +122,8 @@ class AudiencePlannerCrew:
             process=Process.sequential,
             verbose=True,
             tools=[self.sql_tool],
-            max_rpm=30
+            max_rpm=30,
+            pydantic_models=[SQLString]
         )
 
 

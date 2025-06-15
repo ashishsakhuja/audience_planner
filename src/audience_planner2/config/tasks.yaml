@@ -1,25 +1,34 @@
-select_segment_task:
+generate_sql_task:
   description: >
-    Recommend all audience segments that closely match the campaign query: "{query}".
-    Review **all** segments loaded from the official knowledge source, not just the top matches.
-    Do not limit the number of segments returned. if 5, 10, or more segments are relevant, include all of them.
+    Generate a precise SQL statement for the segments table based on the
+    user's campaign query "{query}".
+    **IMPORTANT** DO NOT APPEND LIMIT HERE. Return the full SELECT so we can count
+    **IMPORTANT** DO NOT TRY AND MATCH INTERESTS OR PRODUCTS, analyze the query to determine which demographics to query for.
+  expected_output: >
+    A single SQL SELECT statement (ending with a semicolon).
+  agent: database_guru
 
-    Use only the fields present in the official knowledge source file. Do not infer, invent, or assume any field value.
-    Only select from the exact segment names and attributes loaded into memory.
 
-    Prioritize segments that match:
-    1. age_range
-    2. income_level
-    3. location_type
-    4. recency
-    5. taxonomyId
-
-    IMPORTANT: Use the exact UUID value from the segment.taxonomyId field. Do not guess, invent, or reuse values from other segments.
-
-    Return your output in the following format (do not change casing or labels):
-
-    - **name**: [segment name]
-    - **taxonomyId**: [UUID — must match segment.taxonomyId exactly]
+select_segment_task:
+  description: |
+    Search all segments loaded from the official knowledge source for the campaign query "{query}".  
+    1. Take SQL from 'generate_sql_task'
+        1. Wrap it in a COUNT query (use **size**, not "segment_size"):
+        CALL SegmentSQLTool(query="
+          SELECT COUNT(*) AS totalMatches
+            FROM ({{context.generate_sql_task.pydantic.sql.rstrip(';')}}) AS sub;
+          ")
+    3. THIS COUNT IS YOUR "totalMatches" field.
+       IMPORTANT: NOTE THAT THIS IS THE TOTAL MATCHING SEGMENTS, THIS SHOULD BE A LARGER NUMBER THAN 5.
+    4. Call the SegmentSQLTool with the same SQL to get the full array of segments
+    6. Then list the top best‐matching segments in markdown, using exactly these fields:
+      - **name**, **segmentId**, **age_range**, **income_level**, **location_type**, **recency**, **cpm**, **confidence**, **estimated_reach**
+    Only use data from the source file; do not infer or invent any values.
+  expected_output: >
+    [totalMatches] total segments match the campaign query.
+    
+    ### [segment name 1]
+    - **segmentId**: [UUID]
     - **age_range**: [value]
     - **income_level**: [value]
     - **location_type**: [value]
@@ -27,20 +36,28 @@ select_segment_task:
     - **cpm**: [value]
     - **confidence**: [value]
     - **estimated_reach**: [value]
-
-  expected_output: >
-    A markdown-formatted list of segments that most closely match the campaign criteria, using only the official segment data.
-    You may return as many segments as are relevant. Do not limit your output to 3 segments.
+    
+    ### [segment name 2]
+    …  (up to 5 segments)
   agent: segment_agent
+  depends_on: [generate_sql_task]
 
 
 validate_segment_task:
   description: >
     Validate whether the recommended segments match the campaign query: "{query}".
+    The first line you received from the "segment agent" is structured like this: 
+    "There were 126 segments that matched your campaign query"
+    In this example 126 is your total matches. Whatever this number is, DO NOT CHANGE THIS NUMBER, SIMPLY PUT IT AS "totalMatches" in the output.
+    THIS NUMBER IS NOT 5, IT IS THE TOTAL NUMBER OF MATCHING SEGMENTS.
+    
+    
 
     For each recommended segment, cross-check every field with the source data (age_range, income_level, location_type, recency, taxonomyId, cpm).
     Do not guess or infer values.
-
+    
+    IMPORTANT: You must return the **full** **completed** recommended segments list (All recommended segments, all attributes, all Matches/Mismatches, all explanations)
+    IMPORTANT: Limit the segments returned to 5 segments, but do not artificially restrict to 3.
     IMPORTANT: segmentId must match the exact UUID from segment.segmentId. Do not repeat or reuse IDs across segments.
     IMPORTANT: Only flag mismatches if the campaign query explicitly defines required thresholds.
     IMPORTANT: You must include ALL fields below for each segment, even if they are not present in the data. If any value is missing, write "Not provided" explicitly.
@@ -67,12 +84,18 @@ validate_segment_task:
     - **data_source**: [value] - Matches / Mismatch (explanation if applicable)
 
     End with a summary like:
+    There were [totalMatches] segments that matched your campaign query
+    **Summary**: Only segments A and B are fully valid. Segment C is partially valid. Others are not valid.
+    
+    IMPORTANT: Return an ordered segment list in markdown format with the best matches shown first and the least relevant segments shown last.
+    IMPORTANT: Return the best 3-5 segments that match the campaign query, even if they are not perfect matches in markdown format.
 
-    **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
 
   expected_output: >
-    Return your output in this exact field-by-field markdown format per segment:
-
+    Return your output in this exact field-by-field markdown format:
+        
+    Top segments:
+    
     ### [segment name]
 
     - **Audience Segment Id**: [UUID]
@@ -91,9 +114,11 @@ validate_segment_task:
     - **category**: [value] (explanation if applicable)
     - **quality_score**: [value] (explanation)
     - **data_source**: [value] - Matches / Mismatch (explanation if applicable)
-
+    
     End with a summary like:
-
-    **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
+    X total segments match the campaign query.
+    **Summary**: Only segments A and B are fully valid. Segment C is partially valid. Others are not valid.
   agent: verifier_agent
-  depends_on: [select_segment_task]
+  depends_on: [generate_sql_task, select_segment_task]
+
+
