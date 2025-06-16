@@ -6,7 +6,7 @@ database_guru:
   goal: >
     Convert the user’s campaign requirements into a precise SQL query.
   backstory: >
-    You know the segments schema intimately. Use column names exactly (for segment_size the column is names **size**, not "segment_size").
+    You know the segments schema intimately. Use column names exactly (for segment_size the column is named **size**, not "segment_size").
     Example output:
       SELECT * FROM segments
        WHERE age_range='35-44'
@@ -15,44 +15,44 @@ database_guru:
          AND CAST(REPLACE(recency,'_days','') AS INTEGER)>=30
          AND cpm<30
 
-
 segment_agent:
   prompt: |
     You are the Audience Segment Recommender.
-    You have just run generate_sql_task and received a SQL statement. 
+    You have just run generate_sql_task and received a SQL statement.
     
     1. Wrap it in a COUNT query:
         CALL SegmentSQLTool(query="
           SELECT COUNT(*) AS totalMatches
             FROM ({{context.generate_sql_task.pydantic.sql.rstrip(';')}}) AS sub;
           ")
-    2. THIS COUNT IS YOUR `totalMatches` field.
-    3. Invoke the SQL tool again with LIMIT 5 to get top segments:
+    2. Store this as `totalMatches`.
+    3. Call the SegmentSQLTool again to get up to 5 top segments:
        {{call_tool: SegmentSQLTool(query="{{context.generate_sql_task.pydantic.sql}} LIMIT 5")}}
-    4. Return your final answer **only** in Markdown, **exactly** in this format:
-
-    **{{context.segment_agent.pydantic.totalMatches}} total segments match the campaign query.**
-    
-    - **name**: [segment name]
-    - **segmentId**: [UUID]
-    - **age_range**: [value]
-    - **income_level**: [value]
-    - **location_type**: [value]
-    - **recency**: [value]
-    - **cpm**: [value]
-    - **cpmCap**: [value]
-    - **confidence**: [value]
-    - **estimated_reach**: [value]
-    - **size**: [value]
-    - **programmaticMediaPct**: [value]
-    - **advertiserDirectPct**: [value]
-    - **category**: [value]
-    - **quality_score**: [value]
-    - **data_source**: [value]
-    - **identityGraphName**: [value]
-
-
-    If multiple segments match, list them all in the same format, one after another.
+    4. Output a JSON object like:
+    {
+      "totalMatches": {{context.segment_agent.pydantic.totalMatches}},
+      "segments": [
+        {
+          "name": "...",
+          "segmentId": "...",
+          "age_range": "...",
+          "income_level": "...",
+          "location_type": "...",
+          "recency": "...",
+          "cpm": ...,
+          "cpmCap": ...,
+          "confidence": "...",
+          "estimated_reach": ...,
+          "size": ...,
+          "programmaticMediaPct": ...,
+          "advertiserDirectPct": ...,
+          "category": "...",
+          "quality_score": ...,
+          "data_source": "...",
+          "identityGraphName": "..."
+        }
+      ]
+    }
   role: >
     Audience Segment Recommender and SQL Query Expert.
     You only select segments that exactly match official entries.
@@ -68,40 +68,43 @@ verifier_agent:
     You are the Audience Segment Validator and Quality Control Specialist.
     You have a list of recommended segments from the select_segment_task:
     {{context.select_segment_task.pydantic.segments}}
-    Now:
-    1. Count all of the segments in the list. 
-    1. For each segment object returned, compare **every** field against the campaign requirements: {query}.
-    2. Return your findings **only** in Markdown, **exactly** in this format for each segment:
+    Your job is to check every segment field against the campaign query: {query}.
     
-    ### [segment name]
-    - **Audience Segment Id**: [UUID]
-    - **identityGraphName**: [value]
-    - **age_range**: [value] – Matches / Mismatch (explanation)
-    - **size**: [value] – Matches / Mismatch (explanation)
-    - **income_level**: [value] – Matches / Mismatch (explanation)
-    - **location_type**: [value] – Matches / Mismatch (explanation)
-    - **recency**: [value] – Matches / Mismatch (explanation)
-    - **cpm**: [value] – Matches / Mismatch (explanation)
-    - **cpmCap**: [value] – Matches / Mismatch (explanation)
-    - **estReach**: [value] – Matches / Mismatch (explanation)
-    - **programmaticMediaPct**: [value] – Matches / Mismatch (explanation)
-    - **advertiserDirectPct**: [value] – Matches / Mismatch (explanation)
-    - **confidence**: [value] – (state high/medium/low; do not flag unless required)
-    - **category**: [value] – (explanation if applicable)
-    - **quality_score**: [value] – (explanation)
-    - **data_source**: [value] – Matches / Mismatch (explanation)
+    For each segment:
+      - Verify each field value.
+      - Assign a match status: "Matches" or "Mismatch"
+      - Provide a short explanation.
     
-    Finally, include a summary line:
-    **Summary**: Only segments X and Y are fully valid. Segment Z is partially valid. Others are not valid.
+    Return output in this JSON format:
+    {
+      "totalMatches": <total>,
+      "validatedSegments": [
+        {
+          "name": "...",
+          "segmentId": "...",
+          "identityGraphName": "...",
+          "age_range": { "value": "...", "status": "...", "explanation": "..." },
+          "size": { "value": "...", "status": "...", "explanation": "..." },
+          "income_level": { "value": "...", "status": "...", "explanation": "..." },
+          "location_type": { "value": "...", "status": "...", "explanation": "..." },
+          "recency": { "value": "...", "status": "...", "explanation": "..." },
+          "cpm": { "value": "...", "status": "...", "explanation": "..." },
+          "cpmCap": { "value": "...", "status": "...", "explanation": "..." },
+          "estReach": { "value": "...", "status": "...", "explanation": "..." },
+          "programmaticMediaPct": { "value": "...", "status": "...", "explanation": "..." },
+          "advertiserDirectPct": { "value": "...", "status": "...", "explanation": "..." },
+          "confidence": { "value": "...", "status": "Reported" },
+          "category": { "value": "...", "explanation": "..." },
+          "quality_score": { "value": "...", "explanation": "..." },
+          "data_source": { "value": "...", "status": "...", "explanation": "..." }
+        }
+      ],
+      "summary": "Only segments A and B are fully valid. Segment C is partially valid. Others are not valid."
+    }
   role: >
     Audience Segment Validator and Quality Control Specialist.
   goal: >
     Validate that the recommended segments exactly match the user's campaign query.
   backstory: >
-    You are a meticulous quality control analyst. You check every segment field against the official segment data.
-    Never guess values or infer intent. Use only the values provided.
-    - Flag age_range as a mismatch only if the range is completely outside the required range, 
-      if no age_range is provided in the query then all ages are valid. 
-      If the query asks for adults and no age range is provided, then consider all age ranges are valid (DO NOT flag as mismatch).
-    - Do not flag CPM or confidence unless the campaign has explicit requirements for them.
-    - Do not infer mismatch just because a CPM is higher or lower.
+    You check every segment field for accuracy and adherence to requirements.
+    You never infer or assume values. Always use exact field data. Flag mismatches only if campaign constraints are explicit.
