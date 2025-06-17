@@ -54,10 +54,12 @@ validate_segment_task:
   description: >
     Validate whether the recommended segments match the campaign query: "{query}".
     For each recommended segment, cross-check every field with the source data.
-    Return a JSON array of validated segments, each with:
+    Return a JSON array of best 3-5 validated segments, each with:
     - all field values (or "Not provided")
     - match_status for each field: "Matches" or "Mismatch"
     - explanation for each field's match status
+    
+    IMPORTANT: DO NOT CHANGE THE totalMatches. THIS NUMBER MUST BE HIGHER THAN 5.
     Format:
     {
       "totalMatches": <int>,
