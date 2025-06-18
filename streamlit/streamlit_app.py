@@ -227,7 +227,7 @@ with right:
                 st.session_state.active_output  = h['html']
                 st.session_state.active_summary = h['summary_html']
 
-# ─── Replay previous run ────────────────────────────────────────────────────────
+# ─── Replay previous run ───────────────────────────────────────────────────────
 if st.session_state.active_output and not (run and query.strip()):
     st.markdown(st.session_state.active_output, unsafe_allow_html=True)
     if st.session_state.active_summary:
@@ -287,6 +287,17 @@ if run and query.strip():
         st.code(json_str[:500], language="json")
         st.stop()
 
+    # ─── handle too many matches ──────────────────────────────────────────────────
+    tm = data.get("totalMatches")
+    if tm is not None and tm > 10:
+        st.warning(
+            f"I found {tm} segments matching your criteria. "
+            "Could you please specify additional criteria "
+            "(e.g., age_range, income_level, location_type, recency, or cpmCap) "
+            "to narrow the results?"
+        )
+        st.stop()
+
     # ─── build cards ──────────────────────────────────────────────────────────────
     cards = []
 
@@ -295,7 +306,6 @@ if run and query.strip():
     st.session_state.active_summary = summary_text
 
     # totalMatches chip
-    tm = data.get("totalMatches")
     if tm is not None:
         cards.append(f"<div class='matches-box'>Total Matches: {tm}</div>")
 
