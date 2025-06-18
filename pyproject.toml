@@ -2,8 +2,9 @@
 name = "audience_planner2"
 version = "1.2.0"
 description = "audience_planner2 using crewAI and LLM-based embeddings"
-authors = [{ name = "Ashish sakhuja", email = "ashishsakhuja7@gmail.com" }]
+authors = [{ name = "Ashish Sakhuja", email = "ashishsakhuja7@gmail.com" }]
 requires-python = ">=3.10,<3.13"
+
 dependencies = [
   "crewai[tools]==0.120.1",
 ]
@@ -16,7 +17,7 @@ replay            = "audience_planner2.main:replay"
 test              = "audience_planner2.main:test"
 
 [build-system]
-requires    = ["hatchling"]
+requires      = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.crewai]
