@@ -1,8 +1,30 @@
-.env
+# Virtual environment
+.venv/
+
+# Python bytecode
 __pycache__/
+*.py[cod]
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Lock files (if you ever switch tools)
+pip-selfcheck.json
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
 .DS_Store
-*.pyc
-*.pyo
-*.pyd
+
+# Logs and databases
 *.log
-Thumbs.db
+*.sqlite3
+
+# Environment files
+.env
