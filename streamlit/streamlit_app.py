@@ -19,7 +19,7 @@ if "active_output" not in st.session_state:
 if "active_summary" not in st.session_state:
     st.session_state.active_summary = None
 
-# ─── CSS + Video BG + Title Bubble + Textarea Lock + Summary Box ────────────────
+# ─── CSS + Video BG + Title Bubble + Textarea Lock + Summary & Refinements ────
 st.markdown('''
 <style>
   /* Video background */
@@ -55,6 +55,25 @@ st.markdown('''
     margin-bottom:1rem;
     box-shadow:0 1px 3px rgba(0,0,0,0.1);
     font-weight:600;
+  }
+
+  /* Suggested refinements box */
+  .refinement-box {
+    background:#fff;
+    border:1px solid #dee2e6;
+    border-radius:8px;
+    padding:1rem;
+    margin-top:1rem;
+    box-shadow:0 1px 3px rgba(0,0,0,0.1);
+  }
+  .refinement-box h4 {
+    margin:0 0 0.5rem;
+    font-size:1.25rem;
+    color:#343a40;
+  }
+  .refinement-box ul {
+    margin:0;
+    padding-left:1.2rem;
   }
 
   /* Card grid */
@@ -287,33 +306,60 @@ if run and query.strip():
         st.code(json_str[:500], language="json")
         st.stop()
 
-    # ─── handle too many matches ──────────────────────────────────────────────────
+    # ─── handle too many matches & offer refinements ───────────────────────────────
     tm = data.get("totalMatches")
     if tm is not None and tm > 10:
-        st.warning(
+        st.markdown(
+            f"<div class='matches-box'>"
             f"I found {tm} segments matching your criteria. "
-            "Could you please specify additional criteria "
+            "Please specify additional criteria "
             "(e.g., age_range, income_level, location_type, recency, or cpmCap) "
-            "to narrow the results?"
+            "to narrow the results."
+            "</div>",
+            unsafe_allow_html=True
+        )
+        with st.spinner("💡 Brainstorming additional filters…"):
+            prompt = (
+                "You are a marketing data assistant. "
+                "A user wants to narrow their audience query:\n\n"
+                f"“{query}”\n\n"
+                "Suggest 5 specific additional audience filters "
+                "(age_range, income_level, location_type, recency, cpmCap) "
+                "they could append to make the result set smaller. "
+                "Return them as a bullet list (Not in Markdown Format)."
+            )
+            chat_resp = openai.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role":"user","content":prompt}],
+                temperature=0.7,
+                max_tokens=150,
+            )
+            suggestions = chat_resp.choices[0].message.content
+
+        items = [
+            f"<li>{line.lstrip('- ').strip()}</li>"
+            for line in suggestions.splitlines() if line.startswith("-")
+        ]
+        items_html = "<ul>" + "".join(items) + "</ul>"
+        st.markdown(
+            f"<div class='refinement-box'>"
+            f"<h4>💡 Try adding one of:</h4>"
+            f"{items_html}</div>",
+            unsafe_allow_html=True
         )
 
     # ─── build cards ──────────────────────────────────────────────────────────────
     cards = []
-
-    # extract summary
     summary_text = data.get("summary", "")
     st.session_state.active_summary = summary_text
 
-    # totalMatches chip
     if tm is not None:
         cards.append(f"<div class='matches-box'>Total Matches: {tm}</div>")
-
     cards.append('<div class="card-container">')
 
     for seg in data.get("validatedSegments", []):
-        name = seg.get("name","Unnamed Segment")
-
-        # demographics
+        name      = seg.get("name","Unnamed Segment")
+        # ─── Demographics lines ───────────────────────
         id_line   = f"- **Audience Segment Id**: {seg['segmentId']}"
         identity  = f"- **identityGraphName**: {seg['identityGraphName']}"
         age       = f"- **age_range**: {seg['age_range']['value']} - {seg['age_range']['status']} ({seg['age_range']['explanation']})"
@@ -321,58 +367,53 @@ if run and query.strip():
         income    = f"- **income_level**: {seg['income_level']['value']} - {seg['income_level']['status']} ({seg['income_level']['explanation']})"
         loc       = f"- **location_type**: {seg['location_type']['value']} - {seg['location_type']['status']} ({seg['location_type']['explanation']})"
 
-        # engagement
+        # ─── Engagement lines ──────────────────────────
         recency   = f"- **recency**: {seg['recency']['value']} - {seg['recency']['status']} ({seg['recency']['explanation']})"
         cpm       = f"- **cpm**: {seg['cpm']['value']} - {seg['cpm']['status']} ({seg['cpm']['explanation']})"
         cpmCap    = f"- **cpmCap**: {seg['cpmCap']['value']} - {seg['cpmCap']['status']} ({seg['cpmCap']['explanation']})"
         confidence= f"- **confidence**: {seg['confidence']['value']}"
 
-        # campaign fit
-        fit_lines=[]
+        # ─── Campaign-Fit lines ────────────────────────
+        fit_lines = []
         for key in ("estReach","programmaticMediaPct","advertiserDirectPct","category","quality_score","data_source"):
             val = seg.get(key)
             if isinstance(val, dict):
-                v, s, exp = val.get("value",""), val.get("status"), val.get("explanation","")
+                v, s, e = val.get("value",""), val.get("status"), val.get("explanation","")
                 if s:
-                    fit_lines.append(f"- **{key}**: {v} - {s} ({exp})")
+                    fit_lines.append(f"- **{key}**: {v} - {s} ({e})")
                 else:
-                    fit_lines.append(f"- **{key}**: {v} ({exp})")
+                    fit_lines.append(f"- **{key}**: {v} ({e})")
             else:
                 fit_lines.append(f"- **{key}**: {val}")
 
-        # build campaign ad image
-        prompt_details = "\n".join([
-            id_line, identity, age, size, income, loc,
-            recency, cpm, cpmCap, confidence
-        ])
+        # ─── build DALL·E image URL ───────────────────
+        prompt_details = "\n".join([id_line, identity, age, size, income, loc, recency, cpm, cpmCap, confidence])
         url = get_dalle_url(gen_prompt(query, name, prompt_details))
 
-        # assemble HTML
+        # ─── Assemble HTML ───────────────────────────
         html = '<div class="card">'
         if url:
             html += (
-                f"<div onclick=\"showModal('{url}')\" "
-                f"style='margin-bottom:1rem;text-align:center;'>"
+                f"<div onclick=\"showModal('{url}')\" style='margin-bottom:1rem;text-align:center;'>"
                 f"<img src='{url}' style='max-width:100%;border-radius:8px;'/>"
                 "</div>"
             )
         html += '<div class="card-content">'
-        html += f"<h4>{name}</h4>"
-        html += '<div class="subcards-container">'
+        html += f"<h4>{name}</h4><div class='subcards-container'>"
 
-        # Demographics
+        # demographics subcard
         html += '<div class="subcard"><h5>👤 Demographics</h5>'
         for line in (id_line, identity, age, size, income, loc):
             html += format_segment_line(line)
         html += '</div>'
 
-        # Engagement
+        # engagement subcard
         html += '<div class="subcard engagement"><h5>📈 Engagement</h5>'
         for line in (recency, cpm, confidence, cpmCap):
             html += format_segment_line(line)
         html += '</div>'
 
-        # Campaign Fit
+        # campaign-fit subcard
         html += '<div class="subcard campaign-fit"><h5>🎯 Campaign Fit</h5>'
         for line in fit_lines:
             html += format_segment_line(line)
@@ -382,8 +423,8 @@ if run and query.strip():
         cards.append(html)
 
     cards.append('</div>')
-
     full_html = "".join(cards)
+
     st.session_state.active_output = full_html
     st.session_state.history.append({
         "query":       query,
@@ -401,8 +442,5 @@ if run and query.strip():
             unsafe_allow_html=True
         )
 
-
-
+# Run with:
 # streamlit run streamlit/streamlit_app.py
-
-
