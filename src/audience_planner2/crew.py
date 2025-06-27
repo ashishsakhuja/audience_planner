@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from audience_planner2.tools.sql_query_tool import SegmentSQLTool
 from audience_planner2.models import SQLString
 
-
+load_dotenv()
 llm = LLM(model="gpt-4.1-mini", temperature=0.0)
 
 @CrewBase
