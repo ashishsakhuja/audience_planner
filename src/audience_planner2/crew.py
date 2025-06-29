@@ -10,7 +10,6 @@ from audience_planner2.tools.sql_query_tool import SegmentSQLTool
 from audience_planner2.models import SQLString
 
 load_dotenv()
-llm = LLM(model="gpt-4.1-mini", temperature=0.0)
 
 @CrewBase
 class AudiencePlannerCrew:
@@ -56,7 +55,6 @@ class AudiencePlannerCrew:
     def database_guru(self) -> Agent:
         return Agent(
             config=self.agents_config['database_guru'],
-            llm=llm,
             tools=[],
             verbose=True,
             memory=False,
@@ -66,7 +64,6 @@ class AudiencePlannerCrew:
     def segment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['segment_agent'],
-            llm=llm,
             tools=[self.sql_tool],
             verbose=True,
             memory=False,
@@ -76,7 +73,6 @@ class AudiencePlannerCrew:
     def verifier_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['verifier_agent'],
-            llm=llm,
             tools=[self.sql_tool],
             verbose=True,
             memory=False,
