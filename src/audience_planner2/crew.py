@@ -58,7 +58,6 @@ class AudiencePlannerCrew:
             tools=[],
             verbose=True,
             memory=False,
-            llm=LLM(model=os.getenv("MODEL", "gpt-4.1-mini"))
         )
 
     @agent
@@ -68,7 +67,6 @@ class AudiencePlannerCrew:
             tools=[self.sql_tool],
             verbose=True,
             memory=False,
-            llm=LLM(model=os.getenv("MODEL", "gpt-4.1-mini"))
         )
 
     @agent
@@ -78,7 +76,6 @@ class AudiencePlannerCrew:
             tools=[self.sql_tool],
             verbose=True,
             memory=False,
-            llm=LLM(model=os.getenv("MODEL", "gpt-4.1-mini"))
         )
 
     @task
@@ -122,7 +119,8 @@ class AudiencePlannerCrew:
             verbose=True,
             tools=[self.sql_tool],
             max_rpm=30,
-            pydantic_models=[SQLString]
+            pydantic_models=[SQLString],
+            llm=LLM(model=os.getenv("MODEL", "gpt-4.1-mini"), temperature=0.0)
         )
 
 
