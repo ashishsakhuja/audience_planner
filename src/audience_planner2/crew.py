@@ -25,7 +25,7 @@ class AudiencePlannerCrew:
     tasks_config = 'config/tasks.yaml'
 
     def __init__(self):
-        super().__init__(llm=llm)
+        super().__init__()
         load_dotenv()
         logging.basicConfig(level=logging.INFO)
         self.sql_tool = SegmentSQLTool()
