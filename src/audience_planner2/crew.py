@@ -120,7 +120,6 @@ class AudiencePlannerCrew:
             tools=[self.sql_tool],
             max_rpm=30,
             pydantic_models=[SQLString],
-            llm=LLM(model=os.getenv("MODEL", "gpt-4.1-mini"), temperature=0.0)
         )
 
 
